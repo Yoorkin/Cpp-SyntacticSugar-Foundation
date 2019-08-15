@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Yorkin/CLionProjects/delegate/delegate.hpp
+vector
+-
+
+C:/Users/Yorkin/CLionProjects/delegate/main.cpp
+iostream
+-
+vector
+-
+delegate.hpp
+C:/Users/Yorkin/CLionProjects/delegate/delegate.hpp
+

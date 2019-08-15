@@ -1,0 +1,3 @@
+C:/Users/Yorkin/CLionProjects/delegate/cmake-build-debug/CMakeFiles/delegate.dir
+C:/Users/Yorkin/CLionProjects/delegate/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Yorkin/CLionProjects/delegate/cmake-build-debug/CMakeFiles/rebuild_cache.dir
