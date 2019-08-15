@@ -1,3 +1,5 @@
+#ifndef CPP_DELEGATE
+#define CPP_DELEGATE
 #include <vector>
 
 namespace Delegate{
@@ -29,17 +31,14 @@ namespace Delegate{
     class event{
         std::vector<delegateBase*> delegates;
     public:
-        void operator+=(delegateBase* x);
-        void raise(void* sender,Args* args);
+        void operator+=(delegateBase* x){
+            delegates.push_back(x);
+        };
+        void raise(void* sender,Args* args){
+            for(delegateBase* p:delegates)
+                p->call(sender,args);
+        };
     };
-
-    void event::operator+=(delegateBase *x) {
-        delegates.push_back(x);
-    }
-
-    void event::raise(void *sender, Args *args) {
-        for(delegateBase* p:delegates)
-            p->call(sender,args);
-    }
 }
 
+#endif

@@ -25,6 +25,9 @@ class myclass{
 public:
     int index=0;
     myclass(int v):index(v){};
+    friend delegate<myclass,myclass>;
+    friend int main();
+private:
     void button_click(void* sender,Args* args);
 };
 
