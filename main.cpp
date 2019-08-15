@@ -1,49 +1,47 @@
 #include <iostream>
-#include <vector>
+//#include "lib/Kinw.h"
 #include "delegate.hpp"
+//using namespace Razor;
 using namespace std;
 using namespace Delegate;
-class MouseArgs:public Args{
+class Button
+{
 public:
-    bool is_lbtn_down;
-    bool is_rbtn_down;
+    event<int, bool, bool, int, int> click;
+    event<void, int> active;
 };
 
-class Window{
+class MyApp
+{
 public:
-    event click_event;
-    string title="window";
-    void click(){
-        MouseArgs args;
-        args.is_lbtn_down=false;
-        args.is_rbtn_down=true;
-        click_event.raise(this,&args);
-    };
-};
+    int Btn_click(bool LButton, bool RButton, int x, int y)
+    {
+        cout << LButton << endl;
+        cout << RButton << endl;
+        cout << x << endl;
+        cout << y << endl;
+        return 7;
+    }
 
-class myclass{
-public:
-    int index=0;
-    myclass(int v):index(v){};
-    friend delegate<myclass,myclass>;
-    friend int main();
-private:
-    void button_click(void* sender,Args* args);
-};
-
-void myclass::button_click(void* sender,Args* args){
-    auto s=(Window*)sender;
-    auto a=(MouseArgs*)args;
-    cout<<"click"<<index<<endl;
-    cout<<s->title<<endl;
-    cout<<a->is_rbtn_down<<endl;
+    void Btn_active(int state)
+    {
+        cout << "button state:" << state;
+    }
 };
 
 
 int main() {
-    myclass a(5),b(8);
-    Window window;
-    window.click_event+=make_delegate(&a,&myclass::button_click);
-    window.click_event+=make_delegate(&b,&myclass::button_click);
-    window.click();
+    Button btn;
+    MyApp* myapp = new MyApp();
+    btn.click += make_delegate<int>(myapp, &MyApp::Btn_click);
+    btn.active += make_delegate<void>(myapp, &MyApp::Btn_active);
+    btn.click.raise(true,false,100,99);//委托多播暂时不支持获得返回值
+
+    //btn.active->call(8);
+    //    IFactory* factory = CreateFactory();
+    //    IPosition* pos= factory->Bound(100,100,500,500);
+    //    IForm* form=factory->CreateFrom(pos,"lalala");
+    //    form->Show();
+    //    Pause();
+    //    factory->Dispose();
 }

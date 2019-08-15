@@ -1,44 +1,52 @@
-#ifndef CPP_DELEGATE
-#define CPP_DELEGATE
+//#ifndef CPP_DELEGATE
+//#define CPP_DELEGATE
+#pragma once
 #include <vector>
 
-namespace Delegate{
-    class Args{};
+namespace Delegate {
+    class Args {};
 
-    class delegateBase{
+    template<typename Return, typename... ParamList>
+    class delegateBase {
     public:
-        virtual void call(void* sender,Args* args)=0;
+        virtual Return call(ParamList...params) {  return NULL;  };
+    };
+    template<typename...ParamList>
+    class delegateBase<void,ParamList...> {
+    public:
+        virtual void call(ParamList...params) { };
     };
 
-    template<typename O,typename T>
-    class delegate:public delegateBase{
+    template<typename Return, typename Object, typename... ParamList>
+    class delegate :public delegateBase<Return, ParamList...> {
     public:
-        typedef void (T::*CallBackFunc)(void*,Args*);
-        delegate(O* obj,CallBackFunc p):p_object(obj),p_func(p){};
-        void call(void* sender,Args* args)override{
-            (p_object->*p_func)(sender,args);
+        typedef Return(Object::* CallBackFunc)(ParamList...params);
+        delegate(Object* obj, CallBackFunc p) : p_object(obj), p_func(p) {};
+        Return call(ParamList...params)override {
+            return (p_object->*p_func)(params...);
         }
     private:
-        O* p_object=nullptr;
-        CallBackFunc p_func=nullptr;
+        Object* p_object = nullptr;
+        CallBackFunc p_func = nullptr;
     };
 
-    template<typename O,typename T>
-    delegate<O,T>* make_delegate(O* obj,void (T::*function)(void*,Args*)){
-        return new delegate<O,T>(obj,function);
+    template<typename Return, typename Object, typename...ParamList>
+    delegate<Return, Object, ParamList...>* make_delegate(Object* obj, Return(Object::* function)(ParamList...params)) {
+        return new delegate<Return, Object, ParamList...>(obj, function);
     };
 
+    template<typename Return,typename...ParamList>
     class event{
-        std::vector<delegateBase*> delegates;
+        std::vector<delegateBase<Return,ParamList...>*> delegates;
     public:
-        void operator+=(delegateBase* x){
+        void operator+=(delegateBase<Return,ParamList...>* x){
             delegates.push_back(x);
         };
-        void raise(void* sender,Args* args){
-            for(delegateBase* p:delegates)
-                p->call(sender,args);
+        void raise(ParamList...list){
+            for(delegateBase<Return,ParamList...>* p:delegates)
+                p->call(list...);
         };
     };
 }
 
-#endif
+//#endif 

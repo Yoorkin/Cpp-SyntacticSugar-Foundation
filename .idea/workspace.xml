@@ -58,13 +58,13 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Yorkin\CLionProjects\untitled1\lib" />
-      <recent name="C:\Users\Yorkin\CLionProjects\untitled1" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Yorkin\CLionProjects\untitled1" />
       <recent name="C:\Users\Yorkin\CLionProjects\untitled1\.idea" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Yorkin\CLionProjects\untitled1\lib" />
+      <recent name="C:\Users\Yorkin\CLionProjects\untitled1" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -106,7 +106,8 @@
       <workItem from="1565802429321" duration="37000" />
       <workItem from="1565846614538" duration="8454000" />
       <workItem from="1565859302208" duration="1213000" />
-      <workItem from="1565877620651" duration="26000" />
+      <workItem from="1565877620651" duration="71000" />
+      <workItem from="1565886903294" duration="4599000" />
     </task>
     <servers />
   </component>
