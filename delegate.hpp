@@ -42,9 +42,11 @@ namespace Delegate {
         void operator+=(delegateBase<Return,ParamList...>* x){
             delegates.push_back(x);
         };
-        void raise(ParamList...list){
+        Return raise(ParamList...list) {
+            Return result;
             for(delegateBase<Return,ParamList...>* p:delegates)
-                p->call(list...);
+                result = p -> call(list...);
+            return result;
         };
     };
 }
