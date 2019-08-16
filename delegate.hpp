@@ -17,7 +17,7 @@ namespace Delegate {
 
         Delegate() = default;
 
-        virtual Return call(ParamList ...params) {
+        virtual Return invoke(ParamList ...params) {
             return (*func)(params...);
         };
 
@@ -26,14 +26,14 @@ namespace Delegate {
     };
 
     template <typename Return, typename Object, typename ...ParamList>
-    class MDelegate : public Delegate<Return, ParamList...> {
+    class MemberDelegate : public Delegate<Return, ParamList...> {
     public:
         //CallbackFunc is now a member function in Object
         typedef Return(Object::* CallbackFunc)(ParamList ...params);
 
-        MDelegate(Object *obj, CallbackFunc callback) : object(obj), func(callback) {};
+        MemberDelegate(Object *obj, CallbackFunc callback) : object(obj), func(callback) {};
 
-        Return call(ParamList ...params) override {
+        Return invoke(ParamList ...params) override {
             return (object->*func)(params...);
         }
     private:
@@ -42,13 +42,13 @@ namespace Delegate {
     };
 
     template<typename Return, typename ...ParamList>
-    Delegate<Return, ParamList...>* make_Delegate(Return(function)(ParamList...params)) {
+    Delegate<Return, ParamList...>* make_delegate(Return(function)(ParamList...params)) {
         return new Delegate<Return, ParamList...>(function);
     };
 
     template <typename Return, typename Object, typename ...ParamList>
-    Delegate<Return, ParamList...>* make_Delegate(Object* obj, Return(Object::* function)(ParamList...params)) {
-        return new MDelegate<Return, Object, ParamList...>(obj, function);
+    Delegate<Return, ParamList...>* make_delegate(Object* obj, Return(Object::* function)(ParamList...params)) {
+        return new MemberDelegate<Return, Object, ParamList...>(obj, function);
     };
 
     template<typename Return, typename ...ParamList>
@@ -59,15 +59,41 @@ namespace Delegate {
             delegates.push_back(x);
         };
 
+        void operator+=(Return(*function)(ParamList...)){
+            delegates.push_back(make_delegate<Return,ParamList...>(function));
+        }
+
         Return raise(ParamList ...list){
             Return result;
             for(Delegate<Return, ParamList...>* p : delegates)
-                result = p->call(list...);
+                result = p->invoke(list...);
             return result;
         };
 
-         Return operator()(ParamList ...list) {
+        Return operator()(ParamList ...list) {
             return raise(list...);
+        };
+    };
+
+    template<typename ...ParamList>
+    class event<void,ParamList...>{
+        std::vector<Delegate<void, ParamList...>*> delegates;
+    public:
+        void operator+=(Delegate<void, ParamList...>* x){
+            delegates.push_back(x);
+        };
+
+        void operator+=(void(*function)(ParamList...)){
+            delegates.push_back(make_delegate<void,ParamList...>(function));
+        }
+
+        void raise(ParamList ...list){
+            for(Delegate<void, ParamList...>* p : delegates)
+                p->invoke(list...);
+        };
+
+        void operator()(ParamList ...list) {
+            raise(list...);
         };
     };
 }

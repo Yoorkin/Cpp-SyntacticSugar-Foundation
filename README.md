@@ -3,17 +3,17 @@
 ## 用法
 ```
     //按钮button内部添加点击事件
-    event click;
+    event<void,int,int> click;
 ```
 
 ```$xslt
     //触发事件(不传递附加参数）
-    click.raise(this,nullptr);
+    click(100,99);
 ```
 
 ```$xslt
     //在类MyApp的实例myapp中订阅事件
-    void btn_click(void* sender,Args* args){
+    void btn_click(int x,int y){
         cout<<"按钮button被按下！"<<endl;
     }
     ...
