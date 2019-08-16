@@ -29,13 +29,23 @@ public:
     }
 };
 
+int Btn_click2(bool LButton, bool RButton, int x, int y)
+{
+    cout << LButton << endl;
+    cout << RButton << endl;
+    cout << x << endl;
+    cout << y << endl;
+    return 7;
+}
 
 int main() {
     Button btn;
     MyApp* myapp = new MyApp();
-    btn.click += make_delegate<int>(myapp, &MyApp::Btn_click);
-    btn.active += make_delegate<void>(myapp, &MyApp::Btn_active);
-    btn.click.raise(true,false,100,99);//委托多播暂时不支持获得返回值
+    btn.click += make_Delegate<int>(myapp, &MyApp::Btn_click);
+    btn.active += make_Delegate<void>(myapp, &MyApp::Btn_active);
+//    btn.click += make_Delegate<int>(&Btn_click);
+    int i = btn.click(true,false,100,99); //// Multicast Delegates SHOULD have return values.
+    cout << "return value: " << i << endl;
 
     //btn.active->call(8);
     //    IFactory* factory = CreateFactory();

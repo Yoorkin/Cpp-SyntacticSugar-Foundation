@@ -1,52 +1,75 @@
-//#ifndef CPP_DELEGATE
-//#define CPP_DELEGATE
+#ifndef CPP_DELEGATE
+#define CPP_DELEGATE
 #pragma once
 #include <vector>
 
 namespace Delegate {
     class Args {};
 
-    template<typename Return, typename... ParamList>
-    class delegateBase {
+    template<typename Return, typename ...ParamList>
+    class Delegate {
     public:
-        virtual Return call(ParamList...params) {  return NULL;  };
-    };
-    template<typename...ParamList>
-    class delegateBase<void,ParamList...> {
-    public:
-        virtual void call(ParamList...params) { };
+        // CallBackFunc is a static function 
+        // params is parameter list
+        typedef Return (*CallbackFunc) (ParamList ...params);
+
+        Delegate(CallbackFunc p) : func(p) {};
+
+        Delegate() = default;
+
+        virtual Return call(ParamList ...params) {
+            return (*func)(params...);
+        };
+
+    private:
+        CallbackFunc func = nullptr;
     };
 
-    template<typename Return, typename Object, typename... ParamList>
-    class delegate :public delegateBase<Return, ParamList...> {
+    template <typename Return, typename Object, typename ...ParamList>
+    class MDelegate : public Delegate<Return, ParamList...> {
     public:
-        typedef Return(Object::* CallBackFunc)(ParamList...params);
-        delegate(Object* obj, CallBackFunc p) : p_object(obj), p_func(p) {};
-        Return call(ParamList...params)override {
-            return (p_object->*p_func)(params...);
+        //CallbackFunc is now a member function in Object
+        typedef Return(Object::* CallbackFunc)(ParamList ...params);
+
+        MDelegate(Object *obj, CallbackFunc callback) : object(obj), func(callback) {};
+
+        Return call(ParamList ...params) override {
+            return (object->*func)(params...);
         }
     private:
-        Object* p_object = nullptr;
-        CallBackFunc p_func = nullptr;
+        Object *object = nullptr;
+        CallbackFunc func = nullptr;
     };
 
-    template<typename Return, typename Object, typename...ParamList>
-    delegate<Return, Object, ParamList...>* make_delegate(Object* obj, Return(Object::* function)(ParamList...params)) {
-        return new delegate<Return, Object, ParamList...>(obj, function);
+    template<typename Return, typename ...ParamList>
+    Delegate<Return, ParamList...>* make_Delegate(Return(function)(ParamList...params)) {
+        return new Delegate<Return, ParamList...>(function);
     };
 
-    template<typename Return,typename...ParamList>
+    template <typename Return, typename Object, typename ...ParamList>
+    Delegate<Return, ParamList...>* make_Delegate(Object* obj, Return(Object::* function)(ParamList...params)) {
+        return new MDelegate<Return, Object, ParamList...>(obj, function);
+    };
+
+    template<typename Return, typename ...ParamList>
     class event{
-        std::vector<delegateBase<Return,ParamList...>*> delegates;
+        std::vector<Delegate<Return, ParamList...>*> delegates;
     public:
-        void operator+=(delegateBase<Return,ParamList...>* x){
+        void operator+=(Delegate<Return, ParamList...>* x){
             delegates.push_back(x);
         };
-        void raise(ParamList...list){
-            for(delegateBase<Return,ParamList...>* p:delegates)
-                p->call(list...);
+
+        Return raise(ParamList ...list){
+            Return result;
+            for(Delegate<Return, ParamList...>* p : delegates)
+                result = p->call(list...);
+            return result;
+        };
+
+         Return operator()(ParamList ...list) {
+            return raise(list...);
         };
     };
 }
 
-//#endif 
+#endif 
