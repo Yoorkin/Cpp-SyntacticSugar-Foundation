@@ -11,31 +11,39 @@ public:
     event<void, int> active;
 };
 
-class MyApp
+//class MyApp
+//{
+//public:
+//    int Btn_click(bool LButton, bool RButton, int x, int y)
+//    {
+//        cout << LButton << endl;
+//        cout << RButton << endl;
+//        cout << x << endl;
+//        cout << y << endl;
+//        return 7;
+//    }
+//
+//    void Btn_active(int state)
+//    {
+//        cout << "button state:" << state;
+//    }
+//};
+int Btn_click(bool LButton, bool RButton, int x, int y)
 {
-public:
-    int Btn_click(bool LButton, bool RButton, int x, int y)
-    {
-        cout << LButton << endl;
-        cout << RButton << endl;
-        cout << x << endl;
-        cout << y << endl;
-        return 7;
-    }
-
-    void Btn_active(int state)
-    {
-        cout << "button state:" << state;
-    }
-};
-
+    cout << LButton << endl;
+    cout << RButton << endl;
+    cout << x << endl;
+    cout << y << endl;
+    return 7;
+}
 
 int main() {
     Button btn;
-    MyApp* myapp = new MyApp();
-    btn.click += make_delegate<int>(myapp, &MyApp::Btn_click);
-    btn.active += make_delegate<void>(myapp, &MyApp::Btn_active);
-    btn.click.raise(true,false,100,99);//委托多播暂时不支持获得返回值
+    //MyApp* myapp = new MyApp();
+    //btn.click += make_delegate<int>(myapp, &MyApp::Btn_click);
+    //btn.active += make_delegate<void>(myapp, &MyApp::Btn_active);
+    btn.click += make_delegate<int>(&Btn_click);
+    btn.click(true,false,100,99); //// Multicast Delegates SHOULD have return values.
 
     //btn.active->call(8);
     //    IFactory* factory = CreateFactory();
