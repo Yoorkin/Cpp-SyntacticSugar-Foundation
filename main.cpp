@@ -11,24 +11,25 @@ public:
     event<void, int> active;
 };
 
-//class MyApp
-//{
-//public:
-//    int Btn_click(bool LButton, bool RButton, int x, int y)
-//    {
-//        cout << LButton << endl;
-//        cout << RButton << endl;
-//        cout << x << endl;
-//        cout << y << endl;
-//        return 7;
-//    }
-//
-//    void Btn_active(int state)
-//    {
-//        cout << "button state:" << state;
-//    }
-//};
-int Btn_click(bool LButton, bool RButton, int x, int y)
+class MyApp
+{
+public:
+    int Btn_click(bool LButton, bool RButton, int x, int y)
+    {
+        cout << LButton << endl;
+        cout << RButton << endl;
+        cout << x << endl;
+        cout << y << endl;
+        return 7;
+    }
+
+    void Btn_active(int state)
+    {
+        cout << "button state:" << state;
+    }
+};
+
+int Btn_click2(bool LButton, bool RButton, int x, int y)
 {
     cout << LButton << endl;
     cout << RButton << endl;
@@ -39,11 +40,12 @@ int Btn_click(bool LButton, bool RButton, int x, int y)
 
 int main() {
     Button btn;
-    //MyApp* myapp = new MyApp();
-    //btn.click += make_delegate<int>(myapp, &MyApp::Btn_click);
-    //btn.active += make_delegate<void>(myapp, &MyApp::Btn_active);
-    btn.click += make_delegate<int>(&Btn_click);
-    btn.click(true,false,100,99); //// Multicast Delegates SHOULD have return values.
+    MyApp* myapp = new MyApp();
+    btn.click += make_Delegate<int>(myapp, &MyApp::Btn_click);
+    btn.active += make_Delegate<void>(myapp, &MyApp::Btn_active);
+//    btn.click += make_Delegate<int>(&Btn_click);
+    int i = btn.click(true,false,100,99); //// Multicast Delegates SHOULD have return values.
+    cout << "return value: " << i << endl;
 
     //btn.active->call(8);
     //    IFactory* factory = CreateFactory();
