@@ -1,6 +1,12 @@
-# c++实现的类C#回调机制
+# c++语法糖基础类库
+目前已有的类和功能
 
-## 用法
+|File|Description|
+|---|---|
+|delegate.hpp|类C#委托，实现任意目标函数回调|
+|observer.hpp|数据观察者，当观察的对象被获取或改变时利用delegate回调
+|binding.hpp|以observer为基础，绑定两个observer对象以实现数据同步
+## delegate用法
 ```
     //按钮button内部添加点击事件
     event<void,int,int> click;

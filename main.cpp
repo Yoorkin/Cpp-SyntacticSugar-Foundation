@@ -1,19 +1,20 @@
 #include <iostream>
-//#include "lib/Kinw.h"
 #include "delegate.hpp"
-//using namespace Razor;
+#include "observer.hpp"
+#include "binding.hpp"
+
 using namespace std;
-using namespace Delegate;
-class Button
+using namespace SSF;
+
+void ID_change(int value)
 {
-public:
-    //event<int, bool, bool, int, int> click;
-    //event<void, int> active;
-};
+    cout<<"myapp's ID has changed to "<<value<<endl;
+}
 
 class MyApp
 {
 public:
+    Observer<int> ID = make_observer(new int(8848),make_delegate(ID_change));
     int Btn_click(bool LButton, bool RButton, int x, int y)
     {
         cout << LButton << endl;
@@ -39,6 +40,8 @@ void global_active(int state)
     cout << "global function button state:" << state << endl;
 }
 
+
+
 int main() {
     MyApp *myapp = new MyApp();
 
@@ -46,6 +49,11 @@ int main() {
     active += global_active;
     active += &MyApp::Static_Btn_active;
     active += make_delegate(myapp, &MyApp::Btn_active);
-
     active(6);
+
+    auto id = make_observer(new int);
+    Binding<int> id_binding = make_binding(&id,&myapp->ID);
+    myapp->ID=9099;
+    cout<<"binding id is "<<id<<endl;
+    cout<<myapp->ID<<endl;
 }

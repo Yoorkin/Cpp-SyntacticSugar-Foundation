@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/Yorkin/CLionProjects/delegate/binding.hpp
+observer.hpp
+C:/Users/Yorkin/CLionProjects/delegate/observer.hpp
+
 C:/Users/Yorkin/CLionProjects/delegate/delegate.hpp
 vector
 -
@@ -13,6 +17,14 @@ vector
 C:/Users/Yorkin/CLionProjects/delegate/main.cpp
 iostream
 -
+delegate.hpp
+C:/Users/Yorkin/CLionProjects/delegate/delegate.hpp
+observer.hpp
+C:/Users/Yorkin/CLionProjects/delegate/observer.hpp
+binding.hpp
+C:/Users/Yorkin/CLionProjects/delegate/binding.hpp
+
+C:/Users/Yorkin/CLionProjects/delegate/observer.hpp
 delegate.hpp
 C:/Users/Yorkin/CLionProjects/delegate/delegate.hpp
 

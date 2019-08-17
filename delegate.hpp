@@ -1,10 +1,9 @@
-#ifndef CPP_DELEGATE
-#define CPP_DELEGATE
+#ifndef SSF_DELEGATE
+#define SSF_DELEGATE
 #pragma once
 #include <vector>
 
-namespace Delegate {
-    class Args {};
+namespace SSF {
 
     template<typename Return, typename ...ParamList>
     class Delegate {
