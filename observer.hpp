@@ -10,7 +10,7 @@ namespace SSF{
         //the get delegate will be triggered when property is rvalue
         //the set delegate will be triggered when property is lvalue
         Delegate<T>*   get = nullptr;
-        Delegate<T,T>* set = nullptr;
+        Delegate<void,T>* set = nullptr;
 
     public:
 
@@ -36,10 +36,18 @@ namespace SSF{
 
         void operator=(T t){
             if(set!=nullptr)
-                *ptr_value = set->invoke(t);
+                set->invoke(t);
             else
                 *ptr_value=t;
             change(t);
+        }
+
+        bool is_empty(){
+            return ptr_value==nullptr;
+        }
+
+        T* get_ptr(){
+            return ptr_value;
         }
 
         ~Observer(){
